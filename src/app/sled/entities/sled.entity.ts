@@ -1,14 +1,17 @@
 import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator'
+import { User } from 'src/app/user/entities/user.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
 @Entity()
 export class Sled {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'sled_id' })
   @IsNumber()
   id: number
 
@@ -63,6 +66,10 @@ export class Sled {
   @Column('varchar', { nullable: false, name: 'image_src' })
   @IsString()
   imageSrc: string
+
+  @ManyToOne(() => User, (user) => user.sled)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: User
 
   // Признаки
 
@@ -141,4 +148,32 @@ export class Sled {
   @Column('bool', { nullable: true, name: 'triangle', default: false }) //Треугольник
   @IsBoolean()
   triangle: boolean
+
+  @Column('bool', { nullable: true, name: 'rectangle', default: false }) //Прямоугольник
+  @IsBoolean()
+  rectangle: boolean
+
+  @Column('bool', { nullable: true, name: 'rhombus', default: false }) //Ромб
+  @IsBoolean()
+  rhombus: boolean
+
+  @Column('bool', { nullable: true, name: 'cross', default: false }) //Крест
+  @IsBoolean()
+  cross: boolean
+
+  @Column('bool', { nullable: true, name: 'l-element', default: false }) //Л-элемент
+  @IsBoolean()
+  lElement: boolean
+
+  @Column('bool', { nullable: true, name: 'g-element', default: false }) //Г-элемент
+  @IsBoolean()
+  gElement: boolean
+
+  @Column('bool', { nullable: true, name: 'p-element', default: false }) //П-элемент
+  @IsBoolean()
+  pElement: boolean
+
+  @CreateDateColumn({ nullable: false, name: 'created_at' })
+  @IsDate()
+  createdAt: Date
 }

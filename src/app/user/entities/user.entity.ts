@@ -1,14 +1,17 @@
 import { IsDate, IsNumber, IsString } from 'class-validator'
+import { Sled } from 'src/app/sled/entities/sled.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'user_id' })
   @IsNumber()
   id: number
 
@@ -20,13 +23,17 @@ export class User {
   @IsString()
   password: string
 
-  @Column('varchar', { nullable: false, name: 'first_name' })
+  @Column('varchar', { name: 'first_name' })
   @IsString()
   firstName: string
 
-  @Column('varchar', { nullable: false, name: 'last_name' })
+  @Column('varchar', { name: 'last_name' })
   @IsString()
   lastName: string
+
+  @OneToMany(() => Sled, (sled) => sled.user)
+  @JoinColumn({ name: 'sled_id', referencedColumnName: 'id' })
+  sled: Sled[]
 
   @CreateDateColumn({ nullable: false, name: 'created_at' })
   @IsDate()
